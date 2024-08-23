@@ -5,34 +5,42 @@ import {AuthModule} from './auth/auth.module';
 import {AuthController} from './auth/auth.controller';
 import {AuthService} from './auth/auth.service';
 import {JwtModule} from '@nestjs/jwt';
-import {ConfigModule} from '@nestjs/config';
+import {ConfigModule, ConfigService} from '@nestjs/config';
 import {SequelizeModule} from '@nestjs/sequelize';
-import {User} from "./auth/entities/user.entity";
-import {Status} from "./auth/entities/status.entity";
-import {Experience} from "./auth/entities/experience.entity";
-import {UsersService} from "./users/users.service";
+
 import {UserModule} from "./users/users.module";
+import {User} from "./auth/entities/user.entity";
 
 @Module({
     imports: [
-        ConfigModule.forRoot(), // Loads environment variables from .env
-        SequelizeModule.forRoot({
-            dialect: 'mysql',
-            host: process.env.DB_HOST,
-            port: parseInt(process.env.DB_PORT) || 3306,
-            username: process.env.DB_USERNAME,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_NAME,
-            models: [User, Status, Experience], // Add your models here
-            autoLoadModels: true,
-            synchronize: true, // Automatically creates database tables based on your models
+        // Loads environment variables from .env
+        ConfigModule.forRoot({
+            envFilePath: `.env.${process.env.NODE_ENV}` || '.env', // Dynamically load env file
+            isGlobal: true, // Make the configuration global
         }),
+
+        // Example of using ConfigModule with Sequelize
+        SequelizeModule.forRootAsync({
+            imports: [ConfigModule],  // Import ConfigModule
+            inject: [ConfigService],  // Inject ConfigService
+            useFactory: (configService: ConfigService) => ({
+                dialect: 'mysql',
+                host: configService.get('DATABASE_HOST'),
+                port: +configService.get<number>('DATABASE_PORT'),
+                username: configService.get('DATABASE_USERNAME'),
+                password: configService.get('DATABASE_PASSWORD'),
+                database: configService.get('DATABASE_NAME'),
+                autoLoadModels: true,
+                synchronize: true, // Set to false in production
+            }),
+        }),
+
         JwtModule.register({
             secret: process.env.JWT_SECRET, // Replace with a more secure key in production
             signOptions: {expiresIn: '60m'}, // Token expiration time
         }),
         AuthModule,
-        UserModule
+        UserModule,
     ],
     controllers: [AppController, AuthController],
     providers: [AppService, AuthService],

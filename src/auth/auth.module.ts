@@ -19,7 +19,8 @@ import {UserModule} from "../users/users.module";
       secret: process.env.JWT_SECRET, // Replace with a more secure key in production
       signOptions: { expiresIn: '60m' }, // Token expiration time
     }),
-      UserModule
+      UserModule,
+
   ],
   providers: [AuthService, JwtStrategy],
   exports: [AuthService],

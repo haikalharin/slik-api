@@ -1,41 +1,67 @@
 import {
-  Body,
-  Controller,
-  Post,
-  HttpCode,
-  HttpStatus,
-  Get,
-  Res,
+    Body,
+    Controller,
+    Post,
+    HttpCode,
+    HttpStatus,
+    Get,
+    Res, Req,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { ResponseUtil } from '../utils/response.util';
+import {AuthService} from './auth.service';
+import {ResponseUtil} from '../utils/response.util';
+import {User} from "./entities/user.entity";
+import {UsersService} from "../users/users.service";
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
-
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  async login(@Body() signInDto: Record<string, any>) {
-    const userData = await this.authService.signIn(
-      signInDto.username,
-      signInDto.password,
-    );
-
-    if (!userData) {
-      return ResponseUtil.error('Invalid credentials', HttpStatus.UNAUTHORIZED);
+    constructor(
+        private authService: AuthService,
+        private usersService: UsersService,
+                ) {
     }
 
-    return ResponseUtil.success({
-      userId: userData.userId,
-      username: userData.username,
-      token: userData.token,
-    });
-  }
+    @HttpCode(HttpStatus.OK)
+    @Post('login')
+    async login(@Body() signInDto: Record<string, any>) {
+        const userData = await this.authService.signIn(
+            signInDto.username,
+            signInDto.password,
+        );
 
-  @Get('create')
-  create(@Res({ passthrough: true }) response) {
-    response.cookie('name', 'tobi');
-    return 'hero create';
-  }
+        if (!userData) {
+            return ResponseUtil.error('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+
+        return ResponseUtil.success({
+            userId: userData.userId,
+            username: userData.username,
+            token: userData.token,
+        });
+    }
+
+
+    @Post('create')
+    async create(@Body() createUserDto: Partial<User>) {
+      // try {
+          const userExists = await this.usersService.checkUserExistsByUsername(createUserDto.username)
+          if (userExists) {
+              return ResponseUtil.error('User Exist', HttpStatus.CONFLICT);
+
+          } else {
+              return this.authService.createUser(createUserDto);
+          }
+      // }catch (error){
+      //     return ResponseUtil.error('Invalid credentials', HttpStatus.BAD_REQUEST);
+      //
+      // }
+
+
+
+    }
+
+    //
+    // @Get('getenv')
+    // getEnv(): Promise<String> {
+    //   return this.authService.getDatabaseHost();
+    // }
 }

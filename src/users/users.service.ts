@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/sequelize';
 import {User} from "../auth/entities/user.entity";
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -16,6 +17,25 @@ export class UsersService {
             },
         });
     }
+
+    async checkUserExistsByUsername(username: string): Promise<boolean> {
+        const user = await this.userModel.findOne({ where: { username } });
+        return !!user; // Returns true if user exists, false otherwise
+    }
+
+    async checkUserExistsByEmail(email: string): Promise<boolean> {
+        const user = await this.userModel.findOne({ where: { email } });
+        return !!user; // Returns true if user exists, false otherwise
+    }
+
+    async amd5Hash(data: string): Promise<string> {
+        return crypto.createHash('md5').update(data).digest('hex');
+    }
+
+    async verifyMd5Hash(data: string, hashed: string): Promise<boolean> {
+        const hash = crypto.createHash('md5').update(data).digest('hex');
+        return hash === hashed;
+    };
 
 
     async createUser(data: Partial<User>): Promise<User> {

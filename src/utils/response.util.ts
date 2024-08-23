@@ -14,7 +14,7 @@ export class ResponseUtil {
   static error(
     message: string,
     statusCode: number = 400,
-    status: string = 'ERROR',
+    status: string = 'Failed',
   ) {
     return {
       status,
