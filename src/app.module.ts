@@ -13,28 +13,20 @@ import {User} from "./auth/entities/user.entity";
 
 @Module({
     imports: [
-        // Loads environment variables from .env
         ConfigModule.forRoot({
-            envFilePath: `.env.${process.env.NODE_ENV}` || '.env', // Dynamically load env file
-            isGlobal: true, // Make the configuration global
+            envFilePath: `.env.${process.env.NODE_ENV}` || '.env',
+            isGlobal: true,
         }),
-
-        // Example of using ConfigModule with Sequelize
-        SequelizeModule.forRootAsync({
-            imports: [ConfigModule],  // Import ConfigModule
-            inject: [ConfigService],  // Inject ConfigService
-            useFactory: (configService: ConfigService) => ({
-                dialect: 'mysql',
-                host: configService.get('DATABASE_HOST'),
-                port: +configService.get<number>('DATABASE_PORT'),
-                username: configService.get('DATABASE_USERNAME'),
-                password: configService.get('DATABASE_PASSWORD'),
-                database: configService.get('DATABASE_NAME'),
-                autoLoadModels: true,
-                synchronize: true, // Set to false in production
-            }),
+        SequelizeModule.forRoot({
+            dialect: 'mysql',
+            host: process.env.DB_HOST,
+            port: +process.env.DB_PORT, // Convert port to number
+            username: process.env.DB_USERNAME,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_NAME,
+            autoLoadModels: true,
+            synchronize: true, // Use cautiously in production
         }),
-
         JwtModule.register({
             secret: process.env.JWT_SECRET, // Replace with a more secure key in production
             signOptions: {expiresIn: '60m'}, // Token expiration time

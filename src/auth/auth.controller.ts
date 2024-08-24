@@ -59,9 +59,9 @@ export class AuthController {
 
     }
 
-    //
-    // @Get('getenv')
-    // getEnv(): Promise<String> {
-    //   return this.authService.getDatabaseHost();
-    // }
+
+    @Get('getenv')
+    getEnv(): Promise<String> {
+      return this.authService.getDatabaseHost();
+    }
 }

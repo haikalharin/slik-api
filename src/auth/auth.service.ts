@@ -20,9 +20,9 @@ export class AuthService {
 
    async getDatabaseHost(): Promise<string> {
         const nodeNew = this.configService.get<string>('NODE_ENV');
-        const taging = this.configService.get<string>('DATABASE_HOST');
-        const dbUserName = this.configService.get<string>('DATABASE_USERNAME');
-        const dbName = this.configService.get<string>('DATABASE_NAME');
+        const taging = this.configService.get<string>('DB_HOST');
+        const dbUserName = this.configService.get<string>('DB_USERNAME');
+        const dbName = this.configService.get<string>('DB_NAME');
         return `${nodeNew},${taging},${dbUserName},${dbName}`
     }
 

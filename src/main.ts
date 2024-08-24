@@ -1,11 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import * as dotenv from 'dotenv';
-dotenv.config();
+import * as path from 'path';
+
+const envFile = `.env.${process.env.NODE_ENV || 'development'}`;
+dotenv.config({ path: path.resolve(__dirname, envFile) });
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  await app.listen(3000);
+  const app = await NestFactory.create(AppModule);
+  await app.listen(process.env.PORT);
 }
 bootstrap();
