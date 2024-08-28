@@ -9,7 +9,9 @@ import {ConfigModule, ConfigService} from '@nestjs/config';
 import {SequelizeModule} from '@nestjs/sequelize';
 
 import {UserModule} from "./users/users.module";
-import {User} from "./auth/entities/user.entity";
+import {MasterModule} from "./master/master.module";
+import {MasterController} from "./master/master.controller";
+import {MasterService} from "./master/master.service";
 
 @Module({
     imports: [
@@ -33,9 +35,10 @@ import {User} from "./auth/entities/user.entity";
         }),
         AuthModule,
         UserModule,
+        MasterModule
     ],
-    controllers: [AppController, AuthController],
-    providers: [AppService, AuthService],
+    controllers: [AppController, AuthController,MasterController],
+    providers: [AppService, AuthService,MasterService],
 })
 export class AppModule {
 }
