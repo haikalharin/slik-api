@@ -7,6 +7,7 @@ import {ConfigService} from "@nestjs/config";
 import {MasterCity} from "./entities/master.city";
 import {MasterMenu} from "./entities/master.menu";
 import {MasterError} from "./entities/master.error";
+import {MasterSegment} from "./entities/master.segment";
 
 @Injectable()
 export class MasterService {
@@ -18,6 +19,8 @@ export class MasterService {
         private readonly masterMenu: typeof MasterMenu,
         @InjectModel(MasterError)
         private readonly masterError: typeof MasterError,
+        @InjectModel(MasterSegment)
+        private readonly masterSegment: typeof MasterSegment,
 
         ) {}
 
@@ -75,6 +78,23 @@ export class MasterService {
             solution: data.solution,
         };
         return this.masterError.create(masterError);
+    }
+
+
+    async findAllMasterSegment(): Promise<MasterSegment[]> {
+        return this.masterSegment.findAll();
+    }
+    async checkUserExistsBySegmentName(segmentName: string): Promise<boolean> {
+        const data = await this.masterSegment.findOne({ where: { segmentName } });
+        return !!data; // Returns true if user exists, false otherwise
+    }
+
+    async createSegment(data: Partial<MasterSegment>): Promise<MasterSegment> {
+        // Create a Partial<User> object instead of a full User instance
+        const masterSegment: Partial<MasterSegment> = {
+            segmentName: data.segmentName
+        };
+        return this.masterSegment.create(masterSegment);
     }
 
 }

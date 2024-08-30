@@ -11,6 +11,7 @@ import {UsersService} from "../users/users.service";
 import {ConfigModule} from "@nestjs/config";
 import {MasterMenu} from "./entities/master.menu";
 import {MasterError} from "./entities/master.error";
+import {MasterSegment} from "./entities/master.segment";
 
 
 @Module({
@@ -18,7 +19,7 @@ import {MasterError} from "./entities/master.error";
         ConfigModule.forRoot({
         isGlobal: true, // Makes ConfigModule available globally
     }),
-        SequelizeModule.forFeature([MasterCity,MasterMenu,MasterError])],
+        SequelizeModule.forFeature([MasterCity,MasterMenu,MasterError,MasterSegment])],
     providers: [MasterService],
     exports: [MasterService, SequelizeModule.forFeature([MasterCity])],
 })

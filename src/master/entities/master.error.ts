@@ -10,6 +10,9 @@ export class MasterError extends Model<MasterError> {
     @Column({ primaryKey: true, field: 'error_code'})
     errorCode: string;
 
+    @Column({field: 'error_name'})
+    errorName: string;
+
     @Column({field: 'description'})
     description: string;
 
