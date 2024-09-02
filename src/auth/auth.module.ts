@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { ConfigModule } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import {SequelizeModule} from "@nestjs/sequelize";
-import {User} from "./entities/user.entity";
+import {User} from "../users/entities/user.entity";
 import {Status} from "./entities/status.entity";
 import {Experience} from "./entities/experience.entity";
 import {UsersService} from "../users/users.service";

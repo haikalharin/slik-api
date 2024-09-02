@@ -1,6 +1,6 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {InjectModel} from "@nestjs/sequelize";
-import {User} from "../auth/entities/user.entity";
+import {User} from "../users/entities/user.entity";
 import {UsersService} from "../users/users.service";
 import {JwtService} from "@nestjs/jwt";
 import {ConfigService} from "@nestjs/config";
@@ -8,6 +8,7 @@ import {MasterCity} from "./entities/master.city";
 import {MasterMenu} from "./entities/master.menu";
 import {MasterError} from "./entities/master.error";
 import {MasterSegment} from "./entities/master.segment";
+import {MasterValidation} from "./entities/master.validation";
 
 @Injectable()
 export class MasterService {
@@ -21,6 +22,8 @@ export class MasterService {
         private readonly masterError: typeof MasterError,
         @InjectModel(MasterSegment)
         private readonly masterSegment: typeof MasterSegment,
+        @InjectModel(MasterValidation)
+        private readonly masterValidation: typeof MasterValidation,
 
         ) {}
 
@@ -95,6 +98,23 @@ export class MasterService {
             segmentName: data.segmentName
         };
         return this.masterSegment.create(masterSegment);
+    }
+
+
+    async findAllMasterValidation(): Promise<MasterValidation[]> {
+        return this.masterValidation.findAll();
+    }
+    async checkUserExistsByValidationName(validationName: string): Promise<boolean> {
+        const data = await this.masterValidation.findOne({ where: { validationName } });
+        return !!data; // Returns true if user exists, false otherwise
+    }
+
+    async createValidation(data: Partial<MasterValidation>): Promise<MasterValidation> {
+        // Create a Partial<User> object instead of a full User instance
+        const masterValidation: Partial<MasterValidation> = {
+            validationName: data.validationName
+        };
+        return this.masterValidation.create(masterValidation);
     }
 
 }

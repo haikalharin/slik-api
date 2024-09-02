@@ -12,6 +12,7 @@ import {UserModule} from "./users/users.module";
 import {MasterModule} from "./master/master.module";
 import {MasterController} from "./master/master.controller";
 import {MasterService} from "./master/master.service";
+import { ConfigurationModule } from './configuration/configuration.module';
 
 @Module({
     imports: [
@@ -35,7 +36,8 @@ import {MasterService} from "./master/master.service";
         }),
         AuthModule,
         UserModule,
-        MasterModule
+        MasterModule,
+        ConfigurationModule
     ],
     controllers: [AppController, AuthController,MasterController],
     providers: [AppService, AuthService,MasterService],

@@ -2,7 +2,7 @@ import {Column, CreatedAt, Model, Table, UpdatedAt} from 'sequelize-typescript';
 import {IntegerDataType} from "sequelize";
 
 @Table({
-    tableName: 'slik_master_error', // Explicitly specify the table name in the database
+    tableName: 'slik_master_error_tbl', // Explicitly specify the table name in the database
     timestamps: true,   // Use timestamps for `created_at` and `updated_at`
 })
 export class MasterError extends Model<MasterError> {

@@ -1,7 +1,7 @@
 import {Column, CreatedAt, Model, Table, UpdatedAt} from 'sequelize-typescript';
 
 @Table({
-  tableName: 'user_slik_tbl', // Explicitly specify the table name in the database
+  tableName: 'slik_user_tbl', // Explicitly specify the table name in the database
   timestamps: true,   // Use timestamps for `created_at` and `updated_at`
 })
 export class User extends Model<User> {

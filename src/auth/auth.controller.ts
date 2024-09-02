@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {ResponseUtil} from '../utils/response.util';
-import {User} from "./entities/user.entity";
+import {User} from "../users/entities/user.entity";
 import {UsersService} from "../users/users.service";
 import {JwtAuthGuard} from "./entities/jwt-auth.guard";
 

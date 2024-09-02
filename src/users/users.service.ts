@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { InjectModel } from '@nestjs/sequelize';
-import {User} from "../auth/entities/user.entity";
+import {User} from "./entities/user.entity";
 import * as crypto from 'crypto';
 
 @Injectable()
